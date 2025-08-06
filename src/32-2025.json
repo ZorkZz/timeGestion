@@ -1,0 +1,143 @@
+[
+  {
+    "id": 0,
+    "value": "SAP",
+    "precision": "",
+    "date": "5/8/2024",
+    "start": "16:24:47",
+    "finish": true,
+    "nbPause": 1,
+    "pause": [
+      "16:48:14"
+    ],
+    "launch": [
+      "16:58:13"
+    ],
+    "endHour": "17:18:10",
+    "time": "0:43:24"
+  },
+  {
+    "id": 1,
+    "value": "LogTime",
+    "precision": "",
+    "date": "5/8/2024",
+    "start": "8:7:23",
+    "finish": true,
+    "nbPause": 1,
+    "pause": [
+      "11:57:17"
+    ],
+    "launch": [
+      "13:11:0"
+    ],
+    "endHour": "17:19:13",
+    "time": "7:58:07"
+  },
+  {
+    "id": 2,
+    "value": "DI",
+    "precision": "Ajout Di Manquante",
+    "date": "5/8/2024",
+    "start": "8:21:45",
+    "finish": true,
+    "nbPause": 0,
+    "endHour": "9:15:46",
+    "time": "0:54:1"
+  },
+  {
+    "id": 3,
+    "value": "SAP",
+    "precision": "",
+    "date": "5/8/2024",
+    "start": "9:18:23",
+    "finish": true,
+    "nbPause": 1,
+    "pause": [
+      "9:25:19"
+    ],
+    "launch": [
+      "9:33:33"
+    ],
+    "endHour": "9:53:35",
+    "time": "0:26:58"
+  },
+  {
+    "id": 4,
+    "value": "DI",
+    "precision": "",
+    "date": "5/8/2024",
+    "start": "9:53:39",
+    "finish": true,
+    "nbPause": 1,
+    "pause": [
+      "10:7:31"
+    ],
+    "launch": [
+      "10:22:12"
+    ],
+    "endHour": "10:49:40",
+    "time": "0:41:20"
+  },
+  {
+    "id": 5,
+    "value": "DEV",
+    "precision": "",
+    "date": "5/8/2024",
+    "start": "10:38:33",
+    "finish": true,
+    "nbPause": 3,
+    "pause": [
+      "11:57:18",
+      "14:40:46",
+      "16:52:31"
+    ],
+    "launch": [
+      "13:12:7",
+      "15:30:15",
+      "17:0:12"
+    ],
+    "endHour": "17:18:4",
+    "time": "5:17:21"
+  },
+  {
+    "id": 6,
+    "value": "SAP",
+    "precision": "ARC",
+    "date": "5/8/2024",
+    "start": "14:41:7",
+    "finish": true,
+    "nbPause": 0,
+    "endHour": "15:4:53",
+    "time": "0:23:46"
+  },
+  {
+    "id": 7,
+    "value": "LogTime",
+    "date": "6/8/2024",
+    "precision": "",
+    "start": "08:10:27",
+    "finish": false,
+    "nbPause": 0
+  },
+  {
+    "id": 8,
+    "value": "SAP",
+    "precision": "ARC",
+    "date": "6/8/2024",
+    "start": "08:15:18",
+    "finish": false,
+    "nbPause": 1,
+    "pause": [
+      "9:28:11"
+    ]
+  },
+  {
+    "id": 9,
+    "value": "DEV",
+    "date": "6/8/2024",
+    "precision": "",
+    "start": "9:29:25",
+    "finish": false,
+    "nbPause": 0
+  }
+]
