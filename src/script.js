@@ -151,7 +151,7 @@ const FormManage = () =>
       selectedValue : document.querySelector(`#option${select.value}`).innerText,
       precision     : precision.value,
       timestamp     : `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
-      date          : `${date.getDay()}/${date.getMonth()}/${date.getFullYear()}`,
+      date          : `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
       finish        : false,
       nbPause       : 0
     }
@@ -164,7 +164,7 @@ const AffActions = () =>
 {
   let date = new Date();
   const listCurrentMissions = document.querySelector("#listCurrentMissions");
-  fetch(`${date.getWeekNumber()}-${date.getFullYear()}.json`)
+  fetch(`Data/${date.getWeekNumber()}-${date.getFullYear()}.json`)
       .then(response => {return (response.json())})
       .then(data =>
       {
@@ -185,15 +185,16 @@ const AffActions = () =>
             pauseButton.id = "pause" + data[i].id;
             stopButton.className = "btn btn-danger";
             //TODO mettre un if pause reprendre
-            if (data[i].launch && data[i].launch && data[i].launch.length != data[i].pause.length)
-            {
-              pauseButton.innerText = "reprendre";
-              stopButton.style.display = 'none';
-            }
-            else
+            if ((!data[i].pause && !data[i].launch) || (data[i].pause && data[i].launch && (data[i].launch.length == data[i].pause.length)))
             {
               pauseButton.innerText = "mettre en pause";
               stopButton.style.display = '';
+            }
+            else
+            {
+              pauseButton.innerText = "reprendre";
+              pauseButton.id = "reprendre" + data[i].id;
+              stopButton.style.display = 'none';
             }
             newLine.style = "margin-top: 0.75rem; margin-bottom: 0.75rem";
             pauseButton.style = "margin-right: 0.75rem; margin-left: 0.75rem";
@@ -253,6 +254,15 @@ const AffActions = () =>
       .catch(error => console.error('Error fetching JSON:', error));
 }
 
+const forceReload = () =>
+{
+  const dataForm =
+  {
+    request      :  "-1",
+  }
+  window.api.sendFormData(dataForm);
+}
+
 const reload = () =>
 {
   document.querySelector("#reloadPage").addEventListener("click", e =>
@@ -266,11 +276,21 @@ const reload = () =>
 
 }
 
+const isInTab = (tab, value) =>
+{
+  for (let i = 0; tab[i]; i++)
+    if (tab[i] == value)
+      return (i);
+  return (-1);
+}
+
 const loadJsonFile = () =>
 {
   const fileInput = document.querySelector("#loadJsonInput");
   fileInput.addEventListener("change",async e =>
   {
+    let timeTab = [];
+    let valueTab = [];
     const file = e.target.files[0];
     const reader = new FileReader();
     const content = await new Promise((resolve, reject) =>
@@ -286,6 +306,9 @@ const loadJsonFile = () =>
     }
     body.innerText = "";
     const bigDiv = document.createElement("div");
+    bigDiv.id = "content";
+    bigDiv.style.overflowY = "scroll";
+    bigDiv.style.maxHeight = "816px";
     let h1 = document.createElement("h1");
     h1.innerText="Résumé de la semaine";
     let reloadPage = document.createElement("button");
@@ -299,6 +322,20 @@ const loadJsonFile = () =>
     let mapTime;
     for (let i = 0; data[i]; i++)
     {
+      let indexTab = isInTab(valueTab, data[i].value);
+      if (indexTab == -1)
+        valueTab.push(data[i].value);
+      indexTab = isInTab(valueTab, data[i].value);
+      if (indexTab != -1)
+      {
+        if (data[i].time)
+        {
+          if (timeTab && !timeTab[indexTab])
+            timeTab[indexTab] = data[i].time;
+          else
+            timeTab[indexTab] = addHours(timeTab[indexTab], data[i].time);
+        }
+      }
       const div = document.createElement("div");
       div.id = `div ${i}`;
       const h2 = document.createElement("h2");
@@ -351,12 +388,17 @@ const loadJsonFile = () =>
         deleteButton.addEventListener("click", e =>
         {
           e.preventDefault();
-          const dataForm =
+          let res = confirm("ca va supprimer") ;
+          if (res == true)
           {
-            request      :  "8",
-            id           :  i
+            const dataForm =
+            {
+              request      :  "8",
+              id           :  i
+            }
+            window.api.sendFormData(dataForm);
+            forceReload();
           }
-          window.api.sendFormData(dataForm);
         });
         change.addEventListener("click", e =>
         {
@@ -393,7 +435,83 @@ const loadJsonFile = () =>
       bigDiv.appendChild(div);
       body.appendChild(bigDiv);
     }
+    const canva = addGraph(valueTab, timeTab);
+    canva.style.display = "none";
+    const btn = document.createElement("button");
+    btn.innerText = "Changer la vue";
+    btn.className = "btn btn-primary";
+    btn.addEventListener("click", e =>
+    {
+      const container = document.querySelector("#content");
+      if (canva.style.display == "none")
+      {
+        canva.style.display = "";
+        container.style.display = "none";
+      }
+      else
+      {
+        canva.style.display = "none";
+        container.style.display = "";
+      }
+    });
+    body.appendChild(btn);
   });
+}
+
+const addGraph = (valueTab, timeTab) =>
+{
+  for (let i = 0; timeTab[i]; i++)
+  {
+    h = timeTab[i].split(':');
+    timeTab[i] = h[0];
+    if (h[1] > "30")
+      timeTab[i]++;
+  }
+  const config =
+  {
+    type: 'pie',
+    data:
+    {
+      labels: valueTab,
+      datasets:
+      [{
+        data: timeTab,
+        backgroundColor: [
+          'rgba(255, 99, 132, 0.8)',
+          'rgba(54, 162, 235, 0.8)',
+          'rgba(255, 206, 86, 0.8)',
+          'rgba(75, 192, 192, 0.8)'],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+          'rgba(75, 192, 192, 1)'],
+        borderWidth: 1
+      }]
+    },
+    options:
+    {
+      responsive: true,
+      plugins:
+      {
+        legend:
+        {
+          position: 'top',
+        },
+        title:
+        {
+          display: true,
+          text: 'Répartition du temps'
+        }
+      }
+    }
+  };
+  const canva = document.createElement("canvas");
+  canva.id = "canva";
+  body.appendChild(canva);
+  const ctx = canva.getContext('2d');
+  new Chart(ctx, config);
+  return (canva);
 }
 
 document.addEventListener('DOMContentLoaded', () =>

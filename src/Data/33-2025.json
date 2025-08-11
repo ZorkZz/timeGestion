@@ -1,0 +1,71 @@
+[
+  {
+    "id": 0,
+    "value": "LogTime",
+    "precision": "",
+    "date": "11/8/2025",
+    "start": "8:15:50",
+    "finish": false,
+    "nbPause": 2,
+    "pause": [
+      "11:4:10",
+      "11:4:12",
+      "11:7:37"
+    ],
+    "launch": [
+      "11:4:10",
+      "11:7:34",
+      "11:30:33"
+    ]
+  },
+  {
+    "id": 1,
+    "value": "SAP",
+    "precision": "ARC",
+    "date": "11/8/2025",
+    "start": "8:16:3",
+    "finish": true,
+    "nbPause": 0,
+    "endHour": "10:51:0",
+    "time": "2:34:57"
+  },
+  {
+    "id": 2,
+    "value": "SAP",
+    "precision": "",
+    "date": "11/8/2025",
+    "start": "11:19:17",
+    "finish": true,
+    "nbPause": 1,
+    "pause": [
+      "11:19:34"
+    ],
+    "launch": [
+      "11:19:35"
+    ],
+    "endHour": "11:24:29",
+    "time": "0:05:11"
+  },
+  {
+    "id": 3,
+    "value": "SAP",
+    "precision": "",
+    "date": "11/8/2025",
+    "start": "11:31:36",
+    "finish": true,
+    "nbPause": 0,
+    "endHour": "11:31:42",
+    "time": "0:0:6"
+  },
+  {
+    "id": 4,
+    "value": "test",
+    "precision": "",
+    "date": "11/8/2025",
+    "start": "11:33:45",
+    "finish": true,
+    "nbPause": 0,
+    "endHour": "11:33:47",
+    "time": "0:0:2"
+  }
+]

@@ -26,8 +26,8 @@ const fileToSave = `${semaineActuelle}-${date.getFullYear()}`;
 const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1000,
+    height: 800,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -69,7 +69,7 @@ ipcMain.on('FORM_DATA', (event, data) => {
 
 const deleteAction = data =>
 {
-  const filePath = path.join(__dirname, fileToSave+".json");
+  const filePath = path.join(__dirname, `Data/${fileToSave}.json`);
   fs.readFile(filePath, "utf8", (error, content) =>
   {
     if (error)
@@ -104,14 +104,13 @@ const deleteAction = data =>
           if (err)
             console.log(err);
         });
-        console.log(actionData);
       }
   });
 }
 
 const modifieAction = data =>
 {
-  const filePath = path.join(__dirname, fileToSave+".json");
+  const filePath = path.join(__dirname, `Data/${fileToSave}.json`);
   fs.readFile(filePath, "utf8", (error, content) =>
   {
     let currentActionData = [];
@@ -138,7 +137,7 @@ const modifieAction = data =>
 
 const createAction = (data) =>
 {
-  const filePath = path.join(__dirname, fileToSave+".json");
+  const filePath = path.join(__dirname, `Data/${fileToSave}.json`);
   fs.readFile(filePath, 'utf8', (error, content) =>
   {
     let currentActionData = [];
@@ -160,8 +159,9 @@ const createAction = (data) =>
           title: NOTIFICATION_TITLE,
           body: NOTIFICATION_BODY
         }).show();
-        const notifIntervall = setInterval(notif, 3600000, data);
-        intervalles.push(notifIntervall);
+        //3600000
+        const notifIntervall = setInterval(notif, 5000, data);
+        intervalles[data.id] = notifIntervall;
         const windows = BrowserWindow.getAllWindows();
         if (windows.length > 0)
         {
@@ -175,7 +175,7 @@ const createAction = (data) =>
 
 const finishAction = (data) =>
 {
-  const filePath = path.join(__dirname, fileToSave+".json");
+  const filePath = path.join(__dirname, `Data/${fileToSave}.json`);
   fs.readFile(filePath, 'utf8', (error, content) =>
   {
 
@@ -208,11 +208,12 @@ const finishAction = (data) =>
     });
   });
   clearInterval(intervalles[data.id]);
+  console.log("za");
 }
 
 const pauseAction = data =>
 {
-  const filePath = path.join(__dirname, fileToSave+".json");
+  const filePath = path.join(__dirname, `Data/${fileToSave}.json`);
   fs.readFile(filePath, 'utf8', (error, content) =>
   {
     let currentActionData = JSON.parse(content);
@@ -232,7 +233,7 @@ const pauseAction = data =>
 
 const reLaunchAction = data =>
 {
-  const filePath = path.join(__dirname, fileToSave+".json");
+  const filePath = path.join(__dirname, `Data/${fileToSave}.json`);
   fs.readFile(filePath, 'utf8', (error, content) =>
   {
     let currentActionData = JSON.parse(content);
