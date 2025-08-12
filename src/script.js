@@ -334,180 +334,6 @@ const isInTab = (tab, value) =>
   return (-1);
 }
 
-const loadJsonFile = () =>
-{
-  const fileInput = document.querySelector("#loadJsonInput");
-  fileInput.addEventListener("change",async e =>
-  {
-    let timeTab = [];
-    let valueTab = [];
-    const file = e.target.files[0];
-    const reader = new FileReader();
-    const content = await new Promise((resolve, reject) =>
-    {
-      reader.onload = () => resolve(reader.result);
-      reader.onerror = reject;
-      reader.readAsText(file);
-    });
-    if (!reader.result)
-    {
-      alert("Erreur de chargement de fichier");
-      return;
-    }
-    body.innerText = "";
-    const bigDiv = document.createElement("div");
-    bigDiv.id = "content";
-    bigDiv.style.overflowY = "scroll";
-    bigDiv.style.maxHeight = "816px";
-    let h1 = document.createElement("h1");
-    h1.innerText="Résumé de la semaine";
-    let reloadPage = document.createElement("button");
-    reloadPage.id = "reloadPage"
-    reloadPage.innerText = "menu précédent";
-    reloadPage.className = "btn btn-secondary";
-    body.appendChild(h1);
-    body.appendChild(reloadPage);
-    reload();
-    const data = JSON.parse(reader.result);
-    let mapTime;
-    for (let i = 0; data[i]; i++)
-    {
-      let indexTab = isInTab(valueTab, data[i].value);
-      if (indexTab == -1)
-        valueTab.push(data[i].value);
-      indexTab = isInTab(valueTab, data[i].value);
-      if (indexTab != -1)
-      {
-        if (data[i].time)
-        {
-          if (timeTab && !timeTab[indexTab])
-            timeTab[indexTab] = data[i].time;
-          else
-            timeTab[indexTab] = addHours(timeTab[indexTab], data[i].time);
-        }
-      }
-      const div = document.createElement("div");
-      div.id = `div ${i}`;
-      const h2 = document.createElement("h2");
-      h2.innerText = `Tu as Fait le ${addZeroIfNeed(data[i].date, "/")} :`
-      const value = document.createElement("input");
-      value.value = data[i].value;
-      value.id = `value ${i}`;
-      value.className = "form-control";
-      const ph1 = document.createElement("p");
-      ph1.innerText = "début";
-      const hour1 = document.createElement("input");
-      hour1.value = addZeroIfNeed(data[i].start, ":");
-      hour1.id = `h1 ${i}`;
-      hour1.type = "time";
-      hour1.className = "form-control";
-      const change = document.createElement("button");
-      change.id = `change ${i}`;
-      change.innerText = 'modifier élément';
-      change.className = "btn btn-warning";
-      const deleteButton = document.createElement("button");
-      deleteButton.innerText = "supprimer";
-      deleteButton.id = `delete ${i}`;
-      deleteButton.className ="btn btn-danger";
-      div.appendChild(h2);
-      div.appendChild(value);
-      div.appendChild(ph1)
-      div.appendChild(hour1);
-      if (data[i].finish == true)
-      {
-        const ph2 = document.createElement("p");
-        ph2.innerText = "fin";
-        const hour2 = document.createElement("input");
-        hour2.value = addZeroIfNeed(data[i].endHour, ":");
-        hour2.id = `h2 ${i}`;
-        hour2.type = "time";
-        hour2.className = "form-control";
-        div.appendChild(ph2);
-        div.appendChild(hour2);
-        const pt = document.createElement("p");
-        pt.innerText = "temps total";
-        const finalTime = document.createElement("input");
-        finalTime.value = addZeroIfNeed(data[i].time, ":");
-        finalTime.id = `T ${i}`;
-        finalTime.type = "time";
-        finalTime.className = "form-control";
-        div.appendChild(pt);
-        div.appendChild(finalTime);
-        deleteButton.style = "margin:0.75rem";
-        div.appendChild(deleteButton);
-        deleteButton.addEventListener("click", e =>
-        {
-          e.preventDefault();
-          let res = confirm("ca va supprimer") ;
-          if (res == true)
-          {
-            const dataForm =
-            {
-              request      :  "8",
-              id           :  i
-            }
-            window.api.sendFormData(dataForm);
-            forceReload();
-          }
-        });
-        change.addEventListener("click", e =>
-        {
-          e.preventDefault();
-          const dataForm =
-          {
-            request      :  "7",
-            id           :  i,
-            value        :  value.value,
-            beginH       :  hour1.value,
-            endH         :  hour2.value,
-            time         :  finalTime.value,
-          }
-          window.api.sendFormData(dataForm);
-        });
-      }
-      else
-      {
-        change.addEventListener("click", e =>
-        {
-          e.preventDefault();
-          const dataForm =
-          {
-            request      :  "6",
-            id           :  i,
-            value        :  value.value,
-            beginH       :  hour1.value,
-          }
-          window.api.sendFormData(dataForm);
-        });
-      }
-      change.style = "margin:0.75rem";
-      div.appendChild(change);
-      bigDiv.appendChild(div);
-      body.appendChild(bigDiv);
-    }
-    const canva = addGraph(valueTab, timeTab);
-    canva.style.display = "none";
-    const btn = document.createElement("button");
-    btn.innerText = "Changer la vue";
-    btn.className = "btn btn-primary";
-    btn.addEventListener("click", e =>
-    {
-      const container = document.querySelector("#content");
-      if (canva.style.display == "none")
-      {
-        canva.style.display = "";
-        container.style.display = "none";
-      }
-      else
-      {
-        canva.style.display = "none";
-        container.style.display = "";
-      }
-    });
-    body.appendChild(btn);
-  });
-}
-
 const addGraph = (valueTab, timeTab) =>
 {
   for (let i = 0; timeTab[i]; i++)
@@ -558,10 +384,120 @@ const addGraph = (valueTab, timeTab) =>
   };
   const canva = document.createElement("canvas");
   canva.id = "canva";
-  body.appendChild(canva);
   const ctx = canva.getContext('2d');
   new Chart(ctx, config);
+  canva.style.maxWidth = "500px";
+  canva.style.maxHeight = "500px";
   return (canva);
+}
+
+const loadMultipleJsonFiles = () =>
+{
+  const fileInput = document.querySelector("#loadJsonInput");
+  fileInput.addEventListener("change", async e =>
+  {
+    e.preventDefault();
+    body.innerText = "";
+    let timeTab = [];
+    let valueTab = [];
+    let weekNumber = [];
+    let specialValue = [];
+    const files = e.target.files;
+    const bigDiv = document.createElement("div");
+    const h1 = document.createElement("h1");
+    bigDiv.id = "content";
+    bigDiv.style.overflowY = "auto";
+    bigDiv.style.maxHeight = "816px";
+    h1.innerText = "Résumé des semaine";
+    let reloadPage = document.createElement("button");
+    reloadPage.id = "reloadPage"
+    reloadPage.innerText = "menu précédent";
+    reloadPage.className = "btn btn-secondary";
+    body.appendChild(h1);
+    body.appendChild(reloadPage);
+    reload();
+    for (let i = 0; i < files.length; i++)
+    {
+      const reader = new FileReader();
+      const content = await new Promise((resolve, reject) =>
+      {
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = reject;
+        reader.readAsText(files[i]);
+      });
+      if (!reader.result)
+      {
+        alert("Erreur de chargement de fichier");
+        forceReload();
+        return;
+      }
+      weekNumber.push(files[i].name.split('-')[0]);
+      const data = JSON.parse(reader.result);
+      let specialIndexTab = 0;
+      for (let j = 0; data[j]; j++)
+      {
+        let indexTab = isInTab(valueTab, data[j].value);
+        if (indexTab == -1)
+          valueTab.push(data[j].value);
+        indexTab = isInTab(valueTab, data[j].value);
+        if ( data[j].precision.length != "" && data[j].time)
+        {
+          specialValue[specialIndexTab] = `${data[j].value}: ${data[j].precision}; ${data[j].time}`;
+          specialIndexTab++;
+        }
+        if (indexTab != -1)
+        {
+          if (data[j].time)
+          {
+            if (timeTab && !timeTab[indexTab])
+              timeTab[indexTab] = data[j].time;
+            else
+              timeTab[indexTab] = addHours(timeTab[indexTab], data[j].time);
+          }
+        }
+      }
+    }
+    if (timeTab.length > 0 && valueTab.length > 0)
+    {
+      for (var i = 0; i < weekNumber.length; i++)
+      {
+        h1.innerText += ` ${weekNumber[i]}`;
+      }
+      const resumeDiv = document.createElement("div");
+      bigDiv.style = "display: flex; gap: 5rem;";
+      for (let j = 0; timeTab[j] && valueTab[j]; j++)
+      {
+        const div = document.createElement("div");
+        const value = document.createElement("h4");
+        const hour = document.createElement("h4");
+        hour.innerText = `${timeTab[j]}`;
+        value.innerText = `${valueTab[j]}:`;
+        div.style = "display: flex;"
+        hour.style = "padding: 1rem;";
+        value.style = "padding: 1rem;";
+        div.appendChild(value);
+        div.appendChild(hour);
+        resumeDiv.appendChild(div);
+        bigDiv.appendChild(resumeDiv);
+        body.appendChild(bigDiv);
+      }
+      bigDiv.appendChild(addGraph(valueTab, timeTab));
+    }
+    if (specialValue.length > 0)
+    {
+      const secondTitle = document.createElement("h1");
+      secondTitle.innerText = "Temps spéciaux";
+      const secondBigDiv = document.createElement("div");
+      secondBigDiv.appendChild(secondTitle);
+      for (let i = 0; specialValue[i]; i++)
+      {
+        const txt = document.createElement("h4");
+        txt.innerText = specialValue[i];
+        secondBigDiv.appendChild(txt);
+      }
+      body.appendChild(secondBigDiv);
+    }
+  });
 }
 
 const AddOptionv2 = () =>
@@ -579,7 +515,7 @@ const AddOptionv2 = () =>
 
 document.addEventListener('DOMContentLoaded', () =>
 {
-  loadJsonFile();
+  loadMultipleJsonFiles();
   reload();
   AffActions();
   AddOptionv2();

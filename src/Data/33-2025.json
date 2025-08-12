@@ -90,7 +90,13 @@
     "date": "12/8/2025",
     "start": "08:15:08",
     "finish": false,
-    "nbPause": 0
+    "nbPause": 1,
+    "pause": [
+      "11:50:14"
+    ],
+    "launch": [
+      "13:10:15"
+    ]
   },
   {
     "id": 7,
@@ -111,6 +117,26 @@
     "date": "12/8/2025",
     "start": "10:10:38",
     "finish": false,
-    "nbPause": 0
+    "nbPause": 2,
+    "pause": [
+      "12:50:16",
+      "13:24:44"
+    ],
+    "launch": [
+      "13:10:17",
+      "15:42:20"
+    ]
+  },
+  {
+    "id": 9,
+    "value": "classeur",
+    "precision": "",
+    "date": "12/8/2025",
+    "start": "13:24:50",
+    "finish": false,
+    "nbPause": 1,
+    "pause": [
+      "15:42:10"
+    ]
   }
 ]
