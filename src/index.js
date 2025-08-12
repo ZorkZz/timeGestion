@@ -27,7 +27,7 @@ const createWindow = () => {
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 1000,
-    height: 800,
+    height: 1000,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
     },
@@ -56,6 +56,10 @@ ipcMain.on('FORM_DATA', (event, data) => {
     modifieAction(data);
   else if (data.request == "8")
     deleteAction(data);
+  else if (data.request == "9")
+    addTime(data);
+  else if (data.request == "10")
+    removeTime(data);
   else if (data.request == "-1")
   {
     const windows = BrowserWindow.getAllWindows();
@@ -66,6 +70,64 @@ ipcMain.on('FORM_DATA', (event, data) => {
     }
   }
 });
+
+const addTime = data =>
+{
+  const filePath = path.join(__dirname, `Data/${fileToSave}.json`);
+  fs.readFile(filePath, "utf8", (error, content) =>
+  {
+    let actionData = [];
+    if (error)
+    {
+      console.log(error);
+      return
+    }
+    if (content && content != undefined && content != "" && content.length > 0)
+    {
+      actionData = JSON.parse(content);
+      let actualAction = actionData[data.id];
+      if (!actualAction.timeToAdd)
+        actualAction.timeToAdd = `${data.time}:00`;
+      else
+      actualAction.timeToAdd = addHours(actualAction.timeToAdd, `${data.time}:00`);
+      actionData[data.id] = actualAction;
+      fs.writeFile(filePath, JSON.stringify(actionData, null, 2), "utf8", err =>
+      {
+        if (err)
+          console.log(err);
+      });
+    }
+  });
+}
+
+const removeTime = data =>
+{
+  const filePath = path.join(__dirname, `Data/${fileToSave}.json`);
+  fs.readFile(filePath, "utf8", (error, content) =>
+  {
+    let actionData = [];
+    if (error)
+    {
+      console.log(error);
+      return
+    }
+    if (content && content != undefined && content != "" && content.length > 0)
+    {
+      actionData = JSON.parse(content);
+      let actualAction = actionData[data.id];
+      if (!actualAction.timeToRemove)
+        actualAction.timeToRemove = `${data.time}:00`;
+      else
+      actualAction.timeToRemove = addHours(actualAction.timeToRemove, `${data.time}:00`);
+      actionData[data.id] = actualAction;
+      fs.writeFile(filePath, JSON.stringify(actionData, null, 2), "utf8", err =>
+      {
+        if (err)
+          console.log(err);
+      });
+    }
+  });
+}
 
 const deleteAction = data =>
 {
@@ -192,6 +254,10 @@ const finishAction = (data) =>
     }
     if (currentActionData[data.id].nbPause > 0)
       currentActionData[data.id].time = removeHours(currentActionData[data.id].time, time);
+    if (currentActionData[data.id].timeToAdd)
+      currentActionData[data.id].time = addHours(currentActionData[data.id].time, currentActionData[data.id].timeToAdd);
+      if (currentActionData[data.id].timeToRemove)
+        currentActionData[data.id].time = removeHours(currentActionData[data.id].time, currentActionData[data.id].timeToRemove);
     fs.writeFile(filePath, JSON.stringify(currentActionData, null, 2), 'utf8', (err) =>
     {
       if (err)
@@ -208,7 +274,6 @@ const finishAction = (data) =>
     });
   });
   clearInterval(intervalles[data.id]);
-  console.log("za");
 }
 
 const pauseAction = data =>

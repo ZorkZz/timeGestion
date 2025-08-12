@@ -63,7 +63,7 @@ const addZeroIfNeed = (hour, splitChar) =>
 const ListMission = () =>
 {
   fetch('action.json')
-      .then(response => response.json()) // Parse JSON
+      .then(response => response.json())
       .then(data =>
       {
         let i = 0;
@@ -93,7 +93,7 @@ const ListMission = () =>
           listMission.appendChild(txt);
           i++;
         }
-      }) // Work with JSON data
+      })
       .catch(error => console.error('Error fetching JSON:', error));
 }
 
@@ -121,7 +121,7 @@ const AddOption = () =>
 const SelectOptions = () =>
 {
   fetch('action.json')
-      .then(response => response.json()) // Parse JSON
+      .then(response => response.json())
       .then(data =>
       {
         let i = 0;
@@ -134,7 +134,7 @@ const SelectOptions = () =>
           select.appendChild(option);
           i++;
         }
-      }) // Work with JSON data
+      })
       .catch(error => console.error('Error fetching JSON:', error));
 }
 
@@ -185,7 +185,6 @@ const AffActions = () =>
             pauseButton.className = "btn btn-warning"
             pauseButton.id = "pause" + data[i].id;
             stopButton.className = "btn btn-danger";
-            //TODO mettre un if pause reprendre
             if ((!data[i].pause && !data[i].launch) || (data[i].pause && data[i].launch && (data[i].launch.length == data[i].pause.length)))
             {
               pauseButton.innerText = "mettre en pause";
@@ -197,12 +196,62 @@ const AffActions = () =>
               pauseButton.id = "reprendre" + data[i].id;
               stopButton.style.display = 'none';
             }
-            newLine.style = "margin-top: 0.75rem; margin-bottom: 0.75rem";
+            const changeTime = document.createElement("input");
+            const addButton = document.createElement("button");
+            const removeButton = document.createElement("button");
+            changeTime.type = "time";
+            changeTime.className = "form-control";
+            changeTime.style = "max-width: 8rem; margin-left: 0.75rem;";
+            changeTime.value = "00:00";
+            newLine.style = "margin-top: 0.75rem; margin-bottom: 0.75rem; display: flex;";
+            addButton.className = "btn btn-secondary";
+            addButton.style = "margin-right: 0.75rem; margin-left: 0.75rem";
+            removeButton.className = "btn btn-dark";
+            addButton.innerText = "ajouter";
+            removeButton.innerText = "retirer";
             pauseButton.style = "margin-right: 0.75rem; margin-left: 0.75rem";
             stop.style = "margin-right: 0.75rem; margin-left: 0.75rem";
             newLine.appendChild(pauseButton);
             newLine.appendChild(stopButton);
+            newLine.appendChild(changeTime);
+            newLine.appendChild(addButton);
+            newLine.appendChild(removeButton);
             listCurrentMissions.appendChild(newLine);
+            addButton.addEventListener("click", e =>
+            {
+              e.preventDefault();
+              const dataForm =
+              {
+                request     : "9",
+                id          : data[i].id,
+                time        : changeTime.value
+              };
+              window.api.sendFormData(dataForm);
+              changeTime.value = "00:00";
+            });
+            removeButton.addEventListener("click", e =>
+            {
+              e.preventDefault();
+              const dataForm =
+              {
+                request     : "10",
+                id          : data[i].id,
+                time        : changeTime.value
+              };
+              window.api.sendFormData(dataForm);
+              changeTime.value = "00:00";
+            });
+            removeButton.addEventListener("click", e =>
+            {
+              e.preventDefault();
+              const dataForm =
+              {
+                request     : "10",
+                id          : data[i].id,
+                time        : changeTime.value
+              };
+              window.api.sendFormData(dataForm);
+            });
             stopButton.addEventListener("click", e =>
             {
               e.preventDefault();
