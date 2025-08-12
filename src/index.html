@@ -9,24 +9,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
   </head>
   <body>
-    <h1>Take your Time</h1>
+    <div class="header" style="display:flex;">
+      <h3>Take your Time</h3>
+      <button type="button" name="button" id="reloadPage" class="btn btn-primary" style="margin-left: 1rem;">recharger la page</button>
 
-    <button type="button" name="button" id="reloadPage" class="btn btn-primary">recharger la page</button>
+    </div>
+
 
     <div class="" id="missionList">
-      <h2>Liste de ce que tu fais généralement</h2>
+      <h4>Liste de ce que tu fais généralement</h4>
       <div class="" id="listMission" style="display:flex; flex-wrap: wrap">
+        <p id="newMission" style="padding: 0.5rem;color: blue;text-decoration: underline;cursor: pointer;">Ajouter une mission</p>
 
       </div>
     </div>
 
-    <div class="" id="addMissions">
+    <div class="" id="addMissions" style="display:none">
       <h2>Tu as des nouvelles missions?</h2>
       <form class="" action="index.html" method="post" id="addMissionForm">
         <div class="sm">
           <label for="">Ajoute des actions</label>
           <input type="text" name="" value="" placeholder="mission" class="form-control" id="inputMission">
-          <button type="submit" name="buttonAdd" class="btn btn-success">submit</button>
+          <button type="submit" name="buttonAdd" class="btn btn-success">Envoyer</button>
         </div>
       </form>
     </div>
@@ -38,7 +42,7 @@
         <select name="" id="select" class="form-select">
         </select>
         <input type="text" name="" value="" class="form-control" placeholder="precision" id="precision">
-        <button type="submit" name="buttonSelect" class="btn btn-success">submit</button>
+        <button type="submit" name="buttonSelect" class="btn btn-success">Envoyer</button>
       </form>
     </div>
 

@@ -160,7 +160,7 @@ const createAction = (data) =>
           body: NOTIFICATION_BODY
         }).show();
         //3600000
-        const notifIntervall = setInterval(notif, 5000, data);
+        const notifIntervall = setInterval(notif, 3600000, data);
         intervalles[data.id] = notifIntervall;
         const windows = BrowserWindow.getAllWindows();
         if (windows.length > 0)

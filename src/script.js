@@ -74,7 +74,7 @@ const ListMission = () =>
           txt.id = "toChoose " + i;
           txt.className = "delete";
           txt.innerText = data[i];
-          txt.style = "padding:1.5rem; color:blue; text-decoration:underline; cursor:pointer";
+          txt.style = "padding:0.5rem; color:blue; text-decoration:underline; cursor:pointer";
           txt.addEventListener("click", e =>
           {
             e.preventDefault();
@@ -113,6 +113,7 @@ const AddOption = () =>
       }
       window.api.sendFormData(data);
       input.value = "";
+      this.display = "none";
     }
   });
 }
@@ -514,11 +515,25 @@ const addGraph = (valueTab, timeTab) =>
   return (canva);
 }
 
+const AddOptionv2 = () =>
+{
+  const add = document.querySelector("#newMission").addEventListener("click", e =>
+  {
+    const addMissions = document.querySelector("#addMissions");
+
+    if (addMissions.style.display == "none")
+      addMissions.style.display = "";
+    else
+      addMissions.style.display = "none";
+  });
+}
+
 document.addEventListener('DOMContentLoaded', () =>
 {
   loadJsonFile();
   reload();
   AffActions();
+  AddOptionv2();
   AddOption();
   ListMission();
   SelectOptions();
