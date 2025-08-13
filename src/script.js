@@ -173,6 +173,17 @@ const AffActions = () =>
         {
           if (!data[i].finish)
           {
+            date = new Date();
+            if (data[i].date != `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`)
+            {
+              const dataForm =
+              {
+                request       : "1",
+                id            : data[i].id,
+                timestamp     : `18:0:0`
+              }
+              window.api.sendFormData(dataForm);
+            }
             const selectedValue = document.querySelector(`#option${data[i].value}`);
             const newLine = document.createElement("div");
             newLine.id = data[i].id;
@@ -300,7 +311,7 @@ const AffActions = () =>
           }
           index = i + 1;
         }
-      }) // Work with JSON data
+      })
       .catch(error => console.error('Error fetching JSON:', error));
 }
 

@@ -89,14 +89,16 @@
     "precision": "",
     "date": "12/8/2025",
     "start": "08:15:08",
-    "finish": false,
+    "finish": true,
     "nbPause": 1,
     "pause": [
       "11:50:14"
     ],
     "launch": [
       "13:10:15"
-    ]
+    ],
+    "endHour": "17:24:28",
+    "time": "7:49:19"
   },
   {
     "id": 7,
@@ -104,11 +106,18 @@
     "precision": "",
     "date": "12/8/2025",
     "start": "08:20:12",
-    "finish": false,
-    "nbPause": 1,
+    "finish": true,
+    "nbPause": 2,
     "pause": [
-      "9:54:39"
-    ]
+      "9:54:39",
+      "17:24:26"
+    ],
+    "launch": [
+      "16:54:2",
+      "17:24:26"
+    ],
+    "endHour": "17:24:27",
+    "time": "2:01:25"
   },
   {
     "id": 8,
@@ -116,16 +125,20 @@
     "precision": "",
     "date": "12/8/2025",
     "start": "10:10:38",
-    "finish": false,
-    "nbPause": 2,
+    "finish": true,
+    "nbPause": 3,
     "pause": [
       "12:50:16",
-      "13:24:44"
+      "13:24:44",
+      "16:54:0"
     ],
     "launch": [
       "13:10:17",
-      "15:42:20"
-    ]
+      "15:42:20",
+      "17:24:22"
+    ],
+    "endHour": "17:24:22",
+    "time": "2:53:32"
   },
   {
     "id": 9,
@@ -133,10 +146,45 @@
     "precision": "",
     "date": "12/8/2025",
     "start": "13:24:50",
-    "finish": false,
+    "finish": true,
     "nbPause": 1,
     "pause": [
       "15:42:10"
+    ],
+    "launch": [
+      "17:24:20"
+    ],
+    "endHour": "17:24:20",
+    "time": "2:17:20"
+  },
+  {
+    "id": 10,
+    "value": "LogTime",
+    "precision": "",
+    "date": "13/8/2025",
+    "start": "8:18:9",
+    "finish": false,
+    "nbPause": 0
+  },
+  {
+    "id": 11,
+    "value": "SAP",
+    "precision": "ARC",
+    "date": "13/8/2025",
+    "start": "8:19:8",
+    "finish": false,
+    "nbPause": 1,
+    "pause": [
+      "8:41:54"
     ]
+  },
+  {
+    "id": 12,
+    "value": "DEV",
+    "precision": "",
+    "date": "13/8/2025",
+    "start": "8:42:16",
+    "finish": false,
+    "nbPause": 0
   }
 ]
