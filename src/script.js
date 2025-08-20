@@ -78,7 +78,7 @@ const ListMission = () =>
           txt.addEventListener("click", e =>
           {
             e.preventDefault();
-            let res = confirm("ca va supprimer") ;
+            let res = confirm("Veux-tu supprimer?") ;
             if (res == true)
             {
               const data =
@@ -187,10 +187,16 @@ const AffActions = () =>
             const selectedValue = document.querySelector(`#option${data[i].value}`);
             const newLine = document.createElement("div");
             newLine.id = data[i].id;
-            newLine.innerText = data[i].value + " " + data[i].precision + " debut: " + data[i].start;
+            const pic = document.createElement("img");
+            pic.style = "border-radius: 50%; width: 50px; height 50px; max-width: 50px; max-height: 50px";
+            pic.src = "./Kirby0.gif";
+            newLine.appendChild(pic);
+            const p = document.createElement("p");
+            p.innerText = data[i].value + " " + data[i].precision + " début: " + data[i].start;
+            newLine.appendChild(p);
             const stopButton = document.createElement("button");
             stopButton.id = "stop" + data[i].id;
-            stopButton.innerText = "fin de tache";
+            stopButton.innerText = "fin de tâche";
             stopButton.className = "btn btn-secondary";
             const pauseButton = document.createElement("button");
             pauseButton.className = "btn btn-warning"
@@ -200,12 +206,16 @@ const AffActions = () =>
             {
               pauseButton.innerText = "mettre en pause";
               stopButton.style.display = '';
+              pic.src = "./Kirby0.gif";
+              pic.style.display = "";
             }
             else
             {
               pauseButton.innerText = "reprendre";
               pauseButton.id = "reprendre" + data[i].id;
               stopButton.style.display = 'none';
+              pic.style.display = "none";
+              pic.src = "";
             }
             const changeTime = document.createElement("input");
             const addButton = document.createElement("button");
@@ -228,6 +238,13 @@ const AffActions = () =>
             newLine.appendChild(addButton);
             newLine.appendChild(removeButton);
             listCurrentMissions.appendChild(newLine);
+            if (data[i + 1])
+            {
+              console.log("caca");
+              const line = document.createElement("div");
+              line.style = "background-color: grey; height: 1px; border-radius = 50%;";
+              listCurrentMissions.appendChild(line);
+            }
             addButton.addEventListener("click", e =>
             {
               e.preventDefault();
@@ -291,6 +308,7 @@ const AffActions = () =>
                 pauseButton.id = "reprendre" + data[i].id;
                 pauseButton.innerText = "reprendre";
                 stopButton.style.display = 'none';
+                pic.style.display = "none";
               }
               else
               {
@@ -306,6 +324,8 @@ const AffActions = () =>
                 pauseButton.id = "pause" + data[i].id;
                 pauseButton.innerText = "mettre en pause";
                 stopButton.style.display = '';
+                pic.src = "./Kirby0.gif";
+                pic.style.display = "";
               }
             });
           }
@@ -419,7 +439,7 @@ const loadMultipleJsonFiles = () =>
     bigDiv.id = "content";
     bigDiv.style.overflowY = "auto";
     bigDiv.style.maxHeight = "816px";
-    h1.innerText = "Résumé des semaine";
+    h1.innerText = "Résumé des semaines";
     let reloadPage = document.createElement("button");
     reloadPage.id = "reloadPage"
     reloadPage.innerText = "menu précédent";
@@ -427,6 +447,7 @@ const loadMultipleJsonFiles = () =>
     body.appendChild(h1);
     body.appendChild(reloadPage);
     reload();
+    h1.innerText += ` ${files[0].name.split('-')[0]} à ${files[files.length - 1].name.split('-')[0]}`;
     for (let i = 0; i < files.length; i++)
     {
       const reader = new FileReader();
@@ -470,43 +491,33 @@ const loadMultipleJsonFiles = () =>
     }
     if (timeTab.length > 0 && valueTab.length > 0)
     {
-      for (var i = 0; i < weekNumber.length; i++)
-      {
-        h1.innerText += ` ${weekNumber[i]}`;
-      }
       const resumeDiv = document.createElement("div");
       bigDiv.style = "display: flex; gap: 5rem;";
       for (let j = 0; timeTab[j] && valueTab[j]; j++)
       {
         const div = document.createElement("div");
         const value = document.createElement("h4");
-        const hour = document.createElement("h4");
-        hour.innerText = `${timeTab[j]}`;
-        value.innerText = `${valueTab[j]}:`;
-        div.style = "display: flex;"
-        hour.style = "padding: 1rem;";
-        value.style = "padding: 1rem;";
+        value.innerText = `${valueTab[j]}:  ${timeTab[j]}`;
+        div.style = "display: flex; flex-direction: column; padding: 1rem;";
         div.appendChild(value);
-        div.appendChild(hour);
+        if (specialValue.length > 0)
+        {
+          for (let w = 0; specialValue[w]; w++)
+          {
+            if (specialValue[w].split(':')[0] == valueTab[j])
+            {
+              const txt = document.createElement("p");
+              txt.innerText = specialValue[w];
+              txt.style.paddingLeft = "1rem";
+              div.appendChild(txt);
+            }
+          }
+        }
         resumeDiv.appendChild(div);
         bigDiv.appendChild(resumeDiv);
         body.appendChild(bigDiv);
       }
       bigDiv.appendChild(addGraph(valueTab, timeTab));
-    }
-    if (specialValue.length > 0)
-    {
-      const secondTitle = document.createElement("h1");
-      secondTitle.innerText = "Temps spéciaux";
-      const secondBigDiv = document.createElement("div");
-      secondBigDiv.appendChild(secondTitle);
-      for (let i = 0; specialValue[i]; i++)
-      {
-        const txt = document.createElement("h4");
-        txt.innerText = specialValue[i];
-        secondBigDiv.appendChild(txt);
-      }
-      body.appendChild(secondBigDiv);
     }
   });
 }

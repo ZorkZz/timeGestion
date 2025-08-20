@@ -1,7 +1,6 @@
 const { app, BrowserWindow, Notification, ipcMain } = require('electron');
 const path = require('node:path');
 const fs = require('fs');
-var intervalles = [];
 
 if (require('electron-squirrel-startup')) {
   app.quit();
@@ -36,7 +35,7 @@ const createWindow = () => {
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 };
 
 ipcMain.on('FORM_DATA', (event, data) => {
@@ -215,15 +214,7 @@ const createAction = (data) =>
         console.log(err);
       else
       {
-        const NOTIFICATION_TITLE = "Action créer";
-        const NOTIFICATION_BODY = `tu fais: ${data.selectedValue}, ${data.precision}, il est ${data.timestamp}`;
-        new Notification({
-          title: NOTIFICATION_TITLE,
-          body: NOTIFICATION_BODY
-        }).show();
-        //3600000
-        const notifIntervall = setInterval(notif, 3600000, data);
-        intervalles[data.id] = notifIntervall;
+
         const windows = BrowserWindow.getAllWindows();
         if (windows.length > 0)
         {
@@ -273,7 +264,6 @@ const finishAction = (data) =>
       }
     });
   });
-  clearInterval(intervalles[data.id]);
 }
 
 const pauseAction = data =>
@@ -420,11 +410,10 @@ const removeAction = (data) =>
   });
 }
 
-const notif = (data) =>
+const notif = () =>
 {
-  const NOTIFICATION_TITLE = "As tu oublier?";
-  const NOTIFICATION_BODY =
-  `tu fais: ${data.selectedValue}, ${data.precision}, depuis ${data.timestamp}`;
+  const NOTIFICATION_TITLE = "Tu m'as oublié?";
+  const NOTIFICATION_BODY = "N'oublies pas de vérifier ce que tu fais";
 
   new Notification({
     title: NOTIFICATION_TITLE,
@@ -434,18 +423,11 @@ const notif = (data) =>
 
 app.whenReady().then(() => {
   createWindow();
-  // const NOTIFICATION_TITLE = "Ca Notif Fort ou quoi la";
-  // const NOTIFICATION_BODY = "Ca Notif Fort ou quoi la";
-  //
-  // new Notification({
-  //   title: NOTIFICATION_TITLE,
-  //   body: NOTIFICATION_BODY
-  // }).show();
-
-
   app.on('activate', () => {
-    if (BrowserWindow.getAllWindows().length === 0) {
+    if (BrowserWindow.getAllWindows().length === 0)
+    {
       createWindow();
+      const notifIntervall = setInterval(notif, 3600000);
     }
   });
 });
