@@ -238,9 +238,8 @@ const AffActions = () =>
             newLine.appendChild(addButton);
             newLine.appendChild(removeButton);
             listCurrentMissions.appendChild(newLine);
-            if (data[i + 1])
+            if (i < data.lenght)
             {
-              console.log("caca");
               const line = document.createElement("div");
               line.style = "background-color: grey; height: 1px; border-radius = 50%;";
               listCurrentMissions.appendChild(line);
@@ -268,17 +267,6 @@ const AffActions = () =>
               };
               window.api.sendFormData(dataForm);
               changeTime.value = "00:00";
-            });
-            removeButton.addEventListener("click", e =>
-            {
-              e.preventDefault();
-              const dataForm =
-              {
-                request     : "10",
-                id          : data[i].id,
-                time        : changeTime.value
-              };
-              window.api.sendFormData(dataForm);
             });
             stopButton.addEventListener("click", e =>
             {

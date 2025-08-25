@@ -35,7 +35,7 @@ const createWindow = () => {
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 };
 
 ipcMain.on('FORM_DATA', (event, data) => {
@@ -117,7 +117,8 @@ const removeTime = data =>
       if (!actualAction.timeToRemove)
         actualAction.timeToRemove = `${data.time}:00`;
       else
-      actualAction.timeToRemove = addHours(actualAction.timeToRemove, `${data.time}:00`);
+        actualAction.timeToRemove = addHours(actualAction.timeToRemove, `${data.time}:00`);
+      console.log(data.time);
       actionData[data.id] = actualAction;
       fs.writeFile(filePath, JSON.stringify(actionData, null, 2), "utf8", err =>
       {
