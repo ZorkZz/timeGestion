@@ -423,12 +423,12 @@ const notif = () =>
 }
 
 app.whenReady().then(() => {
+  const notifIntervall = setInterval(notif, 3600000);
   createWindow();
   app.on('activate', () => {
     if (BrowserWindow.getAllWindows().length === 0)
     {
       createWindow();
-      const notifIntervall = setInterval(notif, 3600000);
     }
   });
 });
