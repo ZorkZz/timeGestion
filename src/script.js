@@ -1,6 +1,5 @@
 const body = document.querySelector("body");
 body.style.margin = "auto";
-body.style.maxWidth = "55rem";
 const form = document.querySelector("#form");
 const select = document.querySelector("#select");
 const precision = document.querySelector("#precision");
@@ -173,7 +172,6 @@ const AffActions = () =>
         {
           if (!data[i].finish)
           {
-            date = new Date();
             if (data[i].date != `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`)
             {
               dataForm =
@@ -225,7 +223,7 @@ const AffActions = () =>
             changeTime.className = "form-control";
             changeTime.style = "max-width: 8rem; margin-left: 0.75rem;";
             changeTime.value = "00:00";
-            newLine.style = "margin-top: 0.75rem; margin-bottom: 0.75rem; display: flex;";
+            newLine.className = "currentMissionList";
             addButton.className = "btn btn-secondary";
             addButton.style = "margin-right: 0.75rem; margin-left: 0.75rem";
             removeButton.className = "btn btn-dark";
@@ -320,6 +318,7 @@ const AffActions = () =>
           }
           index = i + 1;
         }
+        EndAllTasks();
       })
       .catch(error => console.error('Error fetching JSON:', error));
 }
@@ -521,6 +520,33 @@ const AddOptionv2 = () =>
       addMissions.style.display = "";
     else
       addMissions.style.display = "none";
+  });
+}
+
+const EndAllTasks = () =>
+{
+  const endAllTaskButton = document.querySelector("#endAllTask")
+  endAllTaskButton.addEventListener("click", async e =>
+  {
+    e.preventDefault();
+    console.log("click");
+    const allTask = document.querySelectorAll(".currentMissionList");
+    const date = new Date;
+    for (let i = 0; allTask[i]; i++)
+    {
+      const missionId = allTask[i].id;
+      dataForm =
+      {
+        request       : "1",
+        id            : missionId,
+        timestamP     : `${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`,
+        timestamp     : `${date.getHours()}:${date.getMinutes() + 1}:${date.getSeconds()}`,
+        notReaload    : 1
+      }
+      window.api.sendFormData(dataForm);
+      await new Promise(r => setTimeout(r, 20));
+    }
+    forceReload();
   });
 }
 

@@ -1,7 +1,15 @@
-body {
+body
+{
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica,
     Arial, sans-serif;
   margin: auto;
-  max-width: 38rem;
+  max-width: 70rem;
   padding: 2rem;
+}
+
+.currentMissionList
+{
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  display: flex;
 }

@@ -263,7 +263,7 @@ const finishAction = (data) =>
     {
       if (err)
         console.log(err);
-      else
+      else if (!data.notReaload)
       {
         const windows = BrowserWindow.getAllWindows();
         if (windows.length > 0)
