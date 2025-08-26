@@ -176,10 +176,11 @@ const AffActions = () =>
             date = new Date();
             if (data[i].date != `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`)
             {
-              const dataForm =
+              dataForm =
               {
                 request       : "1",
                 id            : data[i].id,
+                timestamP    : "17:59:59",
                 timestamp     : `18:0:0`
               }
               window.api.sendFormData(dataForm);

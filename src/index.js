@@ -35,7 +35,7 @@ const createWindow = () => {
   mainWindow.loadFile(path.join(__dirname, 'index.html'));
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 };
 
 ipcMain.on('FORM_DATA', (event, data) => {
@@ -118,7 +118,6 @@ const removeTime = data =>
         actualAction.timeToRemove = `${data.time}:00`;
       else
         actualAction.timeToRemove = addHours(actualAction.timeToRemove, `${data.time}:00`);
-      console.log(data.time);
       actionData[data.id] = actualAction;
       fs.writeFile(filePath, JSON.stringify(actionData, null, 2), "utf8", err =>
       {
@@ -236,6 +235,16 @@ const finishAction = (data) =>
     let time = "";
     let i = 0;
     let currentActionData = JSON.parse(content);
+    if (!currentActionData)
+      return;
+    if (data.timestamP && ((currentActionData[data.id].pause && !currentActionData[data.id].launch) || (currentActionData[data.id].pause != currentActionData[data.id].launch[i].length)))
+    {
+      let launch = [];
+      if (currentActionData[data.id].launch)
+        launch = currentActionData[data.id].launch;
+      launch.push(data.timestamP);
+      currentActionData[data.id].launch = launch;
+    }
     currentActionData[data.id].finish = true;
     currentActionData[data.id].endHour = data.timestamp;
     currentActionData[data.id].time = getDiff(currentActionData[data.id].start, data.timestamp);
@@ -293,7 +302,7 @@ const reLaunchAction = data =>
   fs.readFile(filePath, 'utf8', (error, content) =>
   {
     let currentActionData = JSON.parse(content);
-    let launch = []
+    let launch = [];
     if (currentActionData[data.id].launch)
       launch = currentActionData[data.id].launch;
     launch.push(data.timestamp);
