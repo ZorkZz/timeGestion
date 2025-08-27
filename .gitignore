@@ -91,4 +91,5 @@ typings/
 # Electron-Forge
 out/
 
-*.json
+src/Data/*.json
+action.json

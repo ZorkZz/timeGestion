@@ -166,7 +166,7 @@ const AffActions = () =>
   const listCurrentMissions = document.querySelector("#listCurrentMissions");
   fetch(`Data/${date.getWeekNumber()}-${date.getFullYear()}.json`)
       .then(response => {return (response.json())})
-      .then(data =>
+      .then(async data =>
       {
         for (let i = 0; data[i]; i++)
         {
@@ -182,6 +182,7 @@ const AffActions = () =>
                 timestamp     : `18:0:0`
               }
               window.api.sendFormData(dataForm);
+              await new Promise(r => setTimeout(r, 20));
             }
             const selectedValue = document.querySelector(`#option${data[i].value}`);
             const newLine = document.createElement("div");
