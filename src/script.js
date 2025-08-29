@@ -168,6 +168,9 @@ const AffActions = () =>
       .then(response => {return (response.json())})
       .then(async data =>
       {
+        const line0 = document.createElement("div");
+        line0.style = "background-color: grey; height: 1px; border-radius = 50%;";
+        listCurrentMissions.appendChild(line0);
         for (let i = 0; data[i]; i++)
         {
           if (!data[i].finish)
@@ -238,12 +241,9 @@ const AffActions = () =>
             newLine.appendChild(addButton);
             newLine.appendChild(removeButton);
             listCurrentMissions.appendChild(newLine);
-            if (i < data.lenght)
-            {
-              const line = document.createElement("div");
-              line.style = "background-color: grey; height: 1px; border-radius = 50%;";
-              listCurrentMissions.appendChild(line);
-            }
+            const line1 = document.createElement("div");
+            line1.style = "background-color: grey; height: 1px; border-radius = 50%;";
+            listCurrentMissions.appendChild(line1);
             addButton.addEventListener("click", e =>
             {
               e.preventDefault();
