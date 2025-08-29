@@ -237,13 +237,19 @@ const finishAction = (data) =>
     let currentActionData = JSON.parse(content);
     if (!currentActionData)
       return;
-    if (data.timestamP && ((currentActionData[data.id].pause && !currentActionData[data.id].launch) || (currentActionData[data.id].pause != currentActionData[data.id].launch[i].length)))
+    if (data.timestamP)
     {
-      let launch = [];
-      if (currentActionData[data.id].launch)
-        launch = currentActionData[data.id].launch;
-      launch.push(data.timestamP);
-      currentActionData[data.id].launch = launch;
+      if (currentActionData[data.id].nbPause > 0)
+      {
+        if ((currentActionData[data.id].launch && (currentActionData[data.id].pause.length != currentActionData[data.id].launch.length)) || !currentActionData[data.id].launch)
+        {
+          let launch = [];
+          if (currentActionData[data.id].launch)
+            launch = currentActionData[data.id].launch;
+          launch.push(data.timestamP);
+          currentActionData[data.id].launch = launch;
+        }
+      }
     }
     currentActionData[data.id].finish = true;
     currentActionData[data.id].endHour = data.timestamp;
